@@ -39,3 +39,11 @@ library-management/
 │   │   └── NotificationServiceApplication.java
 │   └── src/main/resources/application.yml
 └── docker-compose.yml              ← MySQL + Kafka + Zookeeper
+
+github.com/your-username/
+├── library-eureka-server
+├── library-api-gateway
+├── library-user-service
+├── library-book-service
+├── library-borrow-service
+└── library-notification-service

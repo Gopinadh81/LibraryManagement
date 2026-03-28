@@ -1,0 +1,35 @@
+# Library Management System
+
+A microservices-based library management system built with
+Java 17, Spring Boot 3.2, Spring Cloud, Hibernate, and MySQL.
+
+## Services
+
+| Service | Port | Description |
+|---------|------|-------------|
+| eureka-server | 8761 | Service registry |
+| api-gateway | 8080 | Entry point, JWT filter, routing |
+| user-service | 8081 | Registration, login, JWT auth |
+| book-service | 8082 | Book catalog and inventory |
+| borrow-service | 8083 | Checkout and return |
+| notification-service | 8084 | Email notifications via Kafka |
+
+## Quick Start
+```bash
+# 1. Start infrastructure (MySQL + Kafka)
+docker-compose up -d mysql kafka zookeeper
+
+# 2. Start services in order
+cd eureka-server      && mvn spring-boot:run &
+cd api-gateway        && mvn spring-boot:run &
+cd user-service       && mvn spring-boot:run &
+cd book-service       && mvn spring-boot:run &
+cd borrow-service     && mvn spring-boot:run &
+cd notification-service && mvn spring-boot:run &
+```
+
+## Tech Stack
+- Java 17 · Spring Boot 3.2 · Spring Cloud 2023
+- Spring Security · JJWT · Spring Data JPA · Hibernate
+- MySQL 8 · Apache Kafka
+- Docker · GitHub Actions

@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+
+  # ── MySQL for User Service ──────────────────────
+  users-db:
+    image: mysql:8.0
+    container_name: users-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: users_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - users_data:/var/lib/mysql
+    networks:
+      - library-net
+
+  # ── MySQL for Book Service ──────────────────────
+  books-db:
+    image: mysql:8.0
+    container_name: books-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: books_db
+    ports:
+      - "3308:3306"
+    volumes:
+      - books_data:/var/lib/mysql
+    networks:
+      - library-net
+
+  # ── MySQL for Borrow Service ────────────────────
+  borrows-db:
+    image: mysql:8.0
+    container_name: borrows-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: borrows_db
+    ports:
+      - "3309:3306"
+    volumes:
+      - borrows_data:/var/lib/mysql
+    networks:
+      - library-net
+
+  # ── MySQL for Notification Service ─────────────
+  notifications-db:
+    image: mysql:8.0
+    container_name: notifications-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notifications_db
+    ports:
+      - "3310:3306"
+    volumes:
+      - notifications_data:/var/lib/mysql
+    networks:
+      - library-net
+
+  # ── Zookeeper (required by Kafka) ───────────────
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - library-net
+
+  # ── Kafka ───────────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - library-net
+
+volumes:
+  users_data:
+  books_data:
+  borrows_data:
+  notifications_data:
+
+networks:
+  library-net:
+    driver: bridge
